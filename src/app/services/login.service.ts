@@ -22,15 +22,22 @@ export class LoginService {
   }
 
   checkSession() {
-    const url = 'http://localhost:8181/checkSession';
-    const xToken = localStorage.getItem('xAuthToken');
-    const basicHeader = 'Basic ' + localStorage.getItem('credentials');
-    const headers = new Headers({
-      'x-auth-token' : xToken,
-      'Authorization' : basicHeader
+    let url = "http://localhost:8181/checkSession";
+    
+    let headers = new Headers ({
+      'x-auth-token' : localStorage.getItem('xAuthToken')
     });
-    console.log(url);
-    console.log(headers);
+
     return this.http.get(url, {headers: headers});
+  }
+
+  logout() {
+    let url = "http://localhost:8181/user/logout";
+    
+    let headers = new Headers ({
+      'x-auth-token' : localStorage.getItem('xAuthToken')
+    });
+
+    return this.http.post(url, '', {headers: headers});
   }
 }
