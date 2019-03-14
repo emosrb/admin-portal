@@ -10,6 +10,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoginService } from './services/login.service';
 import { AddBookService } from './services/add-book.service';
+import { UploadImageService } from './services/upload-image.service'
 import { FormsModule } from '@angular/forms';
 import { AddNewBookComponent } from './components/add-new-book/add-new-book.component'
 
@@ -28,7 +29,7 @@ import { AddNewBookComponent } from './components/add-new-book/add-new-book.comp
     FormsModule,
     MatButtonModule, MatCheckboxModule,MatToolbarModule, MatGridListModule,MatInputModule,MatSelectModule,MatSlideToggleModule
   ],
-  providers: [LoginService,AddBookService],
+  providers: [LoginService,AddBookService,UploadImageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
