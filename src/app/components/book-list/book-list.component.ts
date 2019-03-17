@@ -3,8 +3,8 @@ import { Book } from '../../models/book';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { GetBookListService } from '../../services/get-book-list.service';
-
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {RemoveBookService} from '../../services/remove-book.service';
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
@@ -20,7 +20,9 @@ export class BookListComponent implements OnInit {
 
   constructor(
   		private getBookListService: GetBookListService,
-  		private router:Router
+  		private router:Router,
+      public dialog: MatDialog,
+      private removeBookService:RemoveBookService
   	) { }
 
   onSelect(book:Book){
@@ -28,17 +30,52 @@ export class BookListComponent implements OnInit {
     this.router.navigate(['/viewBook',this.selectedBook.id]);
   }
 
-  ngOnInit() {
-  	this.getBookListService.getBookList().subscribe(
-  		 res=>{
-  		 	console.log(res.json());
-  		 	this.bookList=res.json();
-  		 },
-  		 error=>{
-  		 	console.log(error);
-  		 }
-
-  		);
+  openDialog(book:Book) {
+    let dialogRef = this.dialog.open(DialogOverviewExampleDialog);
+    dialogRef.afterClosed().subscribe(
+      result => {
+        console.log(result);
+        if(result=="yes") {
+          this.removeBookService.sendBook(book.id).subscribe(
+            res => {
+              console.log(res);
+              this.getBookList();   
+            }, 
+            err => {
+              console.log(err);
+            }
+          );
+        }
+      }
+    );
   }
+
+  getBookList() {
+    this.getBookListService.getBookList().subscribe(
+      res => {
+        console.log(res.json());
+        this.bookList=res.json();
+      }, 
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  ngOnInit() {
+    this.getBookList();
+  }
+
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'dialog-overview-example-dialog.html',
+})
+export class DialogOverviewExampleDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>) {}
+ 
 
 }
